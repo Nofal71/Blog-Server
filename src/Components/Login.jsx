@@ -1,15 +1,14 @@
 import { Button, Card, CardContent, Container, LinearProgress, Stack, TextField, Typography } from '@mui/material'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../config/firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const Login = ({ setAlert }) => {
+const Login = ({ setAlert, UserLoggedIn, checkUser }) => {
 
     const navigate = useNavigate()
     const [data, setData] = useState('');
     const [loader, setLoader] = useState(false);
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,16 +21,20 @@ const Login = ({ setAlert }) => {
     const SignIn = async () => {
         try {
             setLoader(true)
-            await signInWithEmailAndPassword(auth, data.email, data.password)
-            localStorage.setItem('userData', JSON.stringify(data))
+            await signInWithEmailAndPassword(auth, data.email, data.password) && UserLoggedIn(true)
             navigate('/')
             setAlert({ message: 'Login Success', type: 'success' })
         } catch (error) {
-            setAlert({ message: 'Login Failed', type: 'warning' })
+            setAlert({ message: 'Login Failed', type: 'warning' }) && UserLoggedIn(false)
             setLoader(false)
             console.error(error)
         }
     }
+    useEffect(() => {
+        if (checkUser){
+            navigate('/')
+        }
+    }, [])
 
     return (
         <>

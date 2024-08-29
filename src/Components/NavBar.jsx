@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,24 +8,26 @@ import IconButton from '@mui/material/IconButton';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { signOut } from 'firebase/auth';
+import { auth } from '../config/firebase'
 
-export default function NavBar({ setAlert }) {
-  const loginData = JSON.parse(localStorage.getItem('userData'))
-  const [name , setName] = React.useState()
+
+export default function NavBar({ setAlert, userLoggedIn, userLoggedOut }) {
+  const [name, setName] = useState()
   const navigate = useNavigate('');
 
-  const LogOut = () => {
-    localStorage.removeItem('userData');
+  const LogOut = async () => {
+    await signOut(auth)
+    userLoggedOut(false)
     setAlert({ message: 'Logout Successfuly', type: 'success' })
     navigate('/login');
   };
- 
-  React.useEffect(() => {
-     if(loginData){
+
+  useEffect(() => {
+    if (userLoggedIn) {
       setName(localStorage.getItem('name'))
-      console.log(name)
-     }
-  }, [loginData])
+    }
+  }, [userLoggedIn])
 
   return (
     <Box sx={{ flexGrow: 1 }} className='anim'>
@@ -43,13 +46,13 @@ export default function NavBar({ setAlert }) {
               <Link to='/' style={{ textDecoration: 'none', color: 'white' }}> Text Utils </Link>
             </Typography>
             <Typography variant="h6" component="div" >
-              {loginData &&
+              {userLoggedIn &&
                 <Link to='/postArea' style={{ textDecoration: 'none', color: 'white' }}> Posts</Link>
               }
             </Typography>
           </Stack>
           {
-            loginData &&
+            userLoggedIn &&
             <Button style={{ textDecoration: 'none', fontSize: '1.3rem', color: 'white' }} onClick={LogOut}> {name}  <LogoutIcon /> </Button>
           }
         </Toolbar>

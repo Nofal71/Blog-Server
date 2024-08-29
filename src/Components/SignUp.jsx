@@ -1,10 +1,10 @@
 import { Button, Card, CardContent, Container, LinearProgress, Stack, TextField, Typography } from '@mui/material'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../config/firebase';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const SignUp = () => {
+const SignUp = ({ setAlert, UserLoggedIn, checkUser }) => {
 
     const [loader, setLoader] = useState(false);
     const [data, setData] = useState('');
@@ -17,22 +17,26 @@ const SignUp = () => {
         }));
 
         if (name === 'firstName' && value !== undefined) localStorage.setItem('name', value);
-        console.log(name);
     }
 
 
     const SignUp = async () => {
         try {
             setLoader(true)
-            localStorage.setItem('userData', JSON.stringify(data))
-            await createUserWithEmailAndPassword(auth, data.email, data.password)
-            navigate('/login')
+            await createUserWithEmailAndPassword(auth, data.email, data.password) && UserLoggedIn(true)
+            setAlert({ message: 'Account Created Successfuly', type: 'success' })
+            navigate('/')
         } catch (error) {
             setLoader(false)
-            console.error(error)
+            UserLoggedIn(false)
+            setAlert({ message: `Failed To Create ${error}`, type: 'warning' })
         }
     }
-
+    useEffect(() => {
+        if (checkUser) {
+            navigate('/')
+        }
+    }, [])
 
     return (
         <>

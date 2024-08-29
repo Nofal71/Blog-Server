@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 
 const App = () => {
   const [alert, setAlert] = useState(false);
-
   const setAlertProp = ({ message, type }) => {
     setAlert({
       message: message,
@@ -24,6 +23,16 @@ const App = () => {
     }, 3000);
   };
 
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const authenticate = (loggedIn) => {
+    if (localStorage.getItem('loggedIn')) {
+      setUserLoggedIn(true)
+    }else{
+      setUserLoggedIn(loggedIn)
+    }
+  };
+
+
   useEffect(() => {
     if (JSON.parse(localStorage.getItem('userData'))) {
       setAlertProp({ message: 'Welcome Back', type: 'success' })
@@ -31,9 +40,11 @@ const App = () => {
   }, [])
 
 
+
+
   return (
     <>
-      <NavBar setAlert={setAlertProp} />
+      <NavBar setAlert={setAlertProp} userLoggedIn={userLoggedIn} userLoggedOut={authenticate} />
       {alert &&
         <AlertMessage message={alert?.message} type={alert?.type} />
       }
@@ -41,7 +52,7 @@ const App = () => {
         <Route
           path='/'
           element={
-            <PrivateRoute>
+            <PrivateRoute userLoggedIn={userLoggedIn}>
               <TextUtils setAlert={setAlertProp} />
             </PrivateRoute>
           }
@@ -56,11 +67,11 @@ const App = () => {
         />
         <Route
           path='/login'
-          element={<Login setAlert={setAlertProp} />}
+          element={<Login setAlert={setAlertProp} UserLoggedIn={authenticate} checkUser={userLoggedIn} />}
         />
         <Route
           path='/signup'
-          element={<SignUp setAlert={setAlertProp} />}
+          element={<SignUp setAlert={setAlertProp} UserLoggedIn={authenticate} checkUser={userLoggedIn} />}
         />
       </Routes>
     </>

@@ -8,8 +8,7 @@ import IconButton from '@mui/material/IconButton';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { signOut } from 'firebase/auth';
-import { auth } from '../config/firebase'
+
 
 
 export default function NavBar({ setAlert, userLoggedIn, userLoggedOut }) {
@@ -17,7 +16,6 @@ export default function NavBar({ setAlert, userLoggedIn, userLoggedOut }) {
   const navigate = useNavigate('');
 
   const LogOut = async () => {
-    await signOut(auth)
     userLoggedOut(false)
     setAlert({ message: 'Logout Successfuly', type: 'success' })
     navigate('/login');

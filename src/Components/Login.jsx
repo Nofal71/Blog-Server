@@ -22,6 +22,7 @@ const Login = ({ setAlert, UserLoggedIn, checkUser }) => {
         try {
             setLoader(true)
             await signInWithEmailAndPassword(auth, data.email, data.password) && UserLoggedIn(true)
+            localStorage.setItem('logined' , true)
             navigate('/')
             setAlert({ message: 'Login Success', type: 'success' })
         } catch (error) {

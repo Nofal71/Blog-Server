@@ -24,6 +24,7 @@ const SignUp = ({ setAlert, UserLoggedIn, checkUser }) => {
         try {
             setLoader(true)
             await createUserWithEmailAndPassword(auth, data.email, data.password) && UserLoggedIn(true)
+            localStorage.setItem('logined', true)
             setAlert({ message: 'Account Created Successfuly', type: 'success' })
             navigate('/')
         } catch (error) {

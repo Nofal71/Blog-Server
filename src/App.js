@@ -25,18 +25,15 @@ const App = () => {
 
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const authenticate = (loggedIn) => {
-    if (localStorage.getItem('loggedIn')) {
-      setUserLoggedIn(true)
-    }else{
-      setUserLoggedIn(loggedIn)
-    }
+    setUserLoggedIn(loggedIn)
+
   };
 
 
   useEffect(() => {
-    if (JSON.parse(localStorage.getItem('userData'))) {
-      setAlertProp({ message: 'Welcome Back', type: 'success' })
-    }
+    // if (JSON.parse(localStorage.getItem('userData'))) {
+    //   setAlertProp({ message: 'Welcome Back', type: 'success' })
+    // }
   }, [])
 
 
@@ -52,7 +49,7 @@ const App = () => {
         <Route
           path='/'
           element={
-            <PrivateRoute userLoggedIn={userLoggedIn}>
+            <PrivateRoute userLoggedIn={userLoggedIn} UserLoggedIn={authenticate}>
               <TextUtils setAlert={setAlertProp} />
             </PrivateRoute>
           }

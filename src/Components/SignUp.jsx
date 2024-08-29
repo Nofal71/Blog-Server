@@ -15,7 +15,11 @@ const SignUp = () => {
             ...prevData,
             [name]: value
         }));
+
+        if (name === 'firstName' && value !== undefined) localStorage.setItem('name', value);
+        console.log(name);
     }
+
 
     const SignUp = async () => {
         try {

@@ -10,6 +10,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function NavBar({ setAlert }) {
   const loginData = JSON.parse(localStorage.getItem('userData'))
+  const [name , setName] = React.useState()
   const navigate = useNavigate('');
 
   const LogOut = () => {
@@ -17,7 +18,13 @@ export default function NavBar({ setAlert }) {
     setAlert({ message: 'Logout Successfuly', type: 'success' })
     navigate('/login');
   };
-
+ 
+  React.useEffect(() => {
+     if(loginData){
+      setName(localStorage.getItem('name'))
+      console.log(name)
+     }
+  }, [loginData])
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -43,7 +50,7 @@ export default function NavBar({ setAlert }) {
           </Stack>
           {
             loginData &&
-            <Button style={{ textDecoration: 'none', fontSize: '1.3rem', color: 'white' }} onClick={LogOut}>  <LogoutIcon /> </Button>
+            <Button style={{ textDecoration: 'none', fontSize: '1.3rem', color: 'white' }} onClick={LogOut}> {name}  <LogoutIcon /> </Button>
           }
         </Toolbar>
       </AppBar>

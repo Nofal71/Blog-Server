@@ -1,14 +1,15 @@
-import { Alert, Button, Card, CardContent, Container, LinearProgress, Stack, TextField, Typography } from '@mui/material'
+import { Button, Card, CardContent, Container, LinearProgress, Stack, TextField, Typography } from '@mui/material'
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth } from '../config/firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const Login = () => {
+const Login = ({ setAlert }) => {
 
     const navigate = useNavigate()
     const [data, setData] = useState('');
     const [loader, setLoader] = useState(false);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -21,25 +22,20 @@ const Login = () => {
     const SignIn = async () => {
         try {
             setLoader(true)
-            setTimeout(() => setLoader(false), 3000)
             await signInWithEmailAndPassword(auth, data.email, data.password)
             localStorage.setItem('userData', JSON.stringify(data))
             navigate('/')
+            setAlert({ message: 'Login Success', type: 'success' })
         } catch (error) {
+            setAlert({ message: 'Login Failed', type: 'warning' })
+            setLoader(false)
             console.error(error)
         }
     }
 
-
-
     return (
         <>
             <Container style={{ marginTop: '5vh' }} >
-                {loader && // Set this to another State
-                    <Stack style={{position:'absolute' , top: '4px' , right:'4px'}}>
-                        <Alert severity='warning' variant='filled' >Login Failed</Alert>
-                    </Stack>
-                }
                 <Typography variant='h4' align='center'>Login</Typography>
                 <Card>
                     <CardContent>

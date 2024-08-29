@@ -4,9 +4,9 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import DescriptionIcon from '@mui/icons-material/Description';
 import ImageIcon from '@mui/icons-material/Image';
-import { auth } from '../config/firebase';
+// import { auth } from '../config/firebase';
 
-export default function TextUtils() {
+export default function TextUtils({ setAlert }) {
     const [description, setdescription] = useState('')
     const [title, setTitle] = useState('')
     const [image, setImage] = useState(null);
@@ -35,15 +35,18 @@ export default function TextUtils() {
                 description: description,
             };
             const updatedPosts = [...existingPosts, newPost];
-            console.log(updatedPosts)
+            console.log(updatedPosts);
             localStorage.setItem('posts', JSON.stringify(updatedPosts));
             setImage(null);
             setTitle('');
             setdescription('');
+
+            setAlert({ message: 'Post saved successfully!', type: 'success' });
         } else {
-            alert('Post Save Failed')
+            setAlert({ message: 'Post save failed. Please fill in all fields.', type: 'warning' });
         }
     };
+
 
     return (
         <>
@@ -90,9 +93,7 @@ export default function TextUtils() {
                         <CardContent style={{ justifyContent: 'center', display: 'flex' }}>
                             <Button onClick={savePost} variant='contained' style={{ width: '30vw' }}>Save Post</Button>
                         </CardContent>
-
                     </Card>
-
                 </Stack>
             </Container>
         </>

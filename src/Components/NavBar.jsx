@@ -8,12 +8,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button, Stack } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
-export default function NavBar() {
+export default function NavBar({ setAlert }) {
   const loginData = JSON.parse(localStorage.getItem('userData'))
   const navigate = useNavigate('');
 
   const LogOut = () => {
     localStorage.removeItem('userData');
+    setAlert({ message: 'Logout Successfuly', type: 'success' })
     navigate('/login');
   };
 

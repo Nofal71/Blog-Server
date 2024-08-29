@@ -7,47 +7,65 @@ import PrivateRoute from './PrivateRoute';
 import TextUtils from './Components/TextUtils';
 import PostArea from './Components/PostArea';
 import Post from './Components/Post';
+import AlertMessage from './Components/Alert';
+import { useEffect, useState } from 'react';
+// import { type } from '@testing-library/user-event/dist/type';
 
 const App = () => {
+  const [alert, setAlert] = useState({
+    message: '',
+    type: ''
+  });
+
+  const setAlertProp = ({ message, type }) => {
+    setAlert({
+      message: message,
+      type: type,
+    });
+    setTimeout(() => {
+      setAlert(null)
+    }, 3000);
+  };
+
+  useEffect(() => {
+    if (JSON.parse(localStorage.getItem('userData'))) {
+      setAlertProp({ message: 'Welcome Back', type: 'success' })
+    }
+  }, [])
+
 
   return (
     <>
-      <NavBar />
+      <NavBar setAlert={setAlertProp} />
+      {alert &&
+        <AlertMessage message={alert?.message} type={alert?.type} />
+      }
       <Routes>
         <Route
           path='/'
           element={
             <PrivateRoute>
-              <TextUtils />
+              <TextUtils setAlert={setAlertProp} />
             </PrivateRoute>
           }
         />
         <Route
           path='/postArea'
-          element={
-            <PostArea />
-          }
+          element={<PostArea setAlert={setAlertProp} />}
         />
         <Route
           path='/currentPost'
-          element={
-            <Post />
-          }
+          element={<Post setAlert={setAlertProp} />}
         />
         <Route
           path='/login'
-          element={
-            <Login />
-          }
+          element={<Login setAlert={setAlertProp} />}
         />
         <Route
           path='/signup'
-          element={
-            <SignUp />
-          }
+          element={<SignUp setAlert={setAlertProp} />}
         />
       </Routes>
-
     </>
   );
 };

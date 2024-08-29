@@ -12,10 +12,7 @@ import { useEffect, useState } from 'react';
 // import { type } from '@testing-library/user-event/dist/type';
 
 const App = () => {
-  const [alert, setAlert] = useState({
-    message: '',
-    type: ''
-  });
+  const [alert, setAlert] = useState(false);
 
   const setAlertProp = ({ message, type }) => {
     setAlert({

@@ -27,7 +27,7 @@ export default function NavBar({ setAlert }) {
   }, [loginData])
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 }} className='anim'>
       <AppBar position="static">
         <Toolbar>
           <IconButton

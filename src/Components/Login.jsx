@@ -35,7 +35,7 @@ const Login = ({ setAlert }) => {
 
     return (
         <>
-            <Container style={{ marginTop: '5vh' }} >
+            <Container style={{ marginTop: '5vh' }} className='anim'>
                 <Typography variant='h4' align='center'>Login</Typography>
                 <Card>
                     <CardContent>

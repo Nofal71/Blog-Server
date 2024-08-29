@@ -36,7 +36,7 @@ const SignUp = () => {
 
     return (
         <>
-            <Container style={{ marginTop: '5vh' }} >
+            <Container style={{ marginTop: '5vh' }} className='anim'>
                 <Typography variant='h4' align='center'>Signup</Typography>
                 <Card>
                     <CardContent>

@@ -32,7 +32,24 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
+  }
+}
+
+.anim{
+  animation-name: animate;
+  animation-timing-function: ease;
+  animation-duration: 1s;
+}
+
+@keyframes animate {
+  0% {
+    transform: translateY(-400%);
+  }
+
+  100% {
+    transform: translateX(0);
   }
 }

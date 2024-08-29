@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const SignUp = ({ setAlert, UserLoggedIn, checkUser }) => {
-
     const [loader, setLoader] = useState(false);
     const [data, setData] = useState('');
     const navigate = useNavigate()
@@ -15,11 +14,9 @@ const SignUp = ({ setAlert, UserLoggedIn, checkUser }) => {
             ...prevData,
             [name]: value
         }));
-
         if (name === 'firstName' && value !== undefined) localStorage.setItem('name', value);
     }
-
-
+    
     const SignUp = async () => {
         try {
             setLoader(true)
@@ -37,7 +34,7 @@ const SignUp = ({ setAlert, UserLoggedIn, checkUser }) => {
         if (checkUser) {
             navigate('/')
         }
-    }, [])
+    })
 
     return (
         <>

@@ -35,7 +35,7 @@ const Login = ({ setAlert, UserLoggedIn, checkUser }) => {
         if (checkUser){
             navigate('/')
         }
-    }, [])
+    })
 
     return (
         <>

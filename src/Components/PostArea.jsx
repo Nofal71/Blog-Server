@@ -33,6 +33,10 @@ export default function PostArea({ setAlert }) {
         }
         console.log('......................')
     }, [Data]);
+    
+    useEffect(() => {
+        fetchPosts();
+    }, [])
 
     return (
         <Container>

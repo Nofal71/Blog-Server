@@ -42,12 +42,12 @@ const Login = ({ setAlert, UserLoggedIn, checkUser }) => {
         setData('')
     }
 
-    // useEffect(() => {
-    //     // CheckUser prop gets state if userLoggedIn or not (as sets in App.js)
-    //     if (checkUser) {
-    //         navigate('/')
-    //     }
-    // })
+    useEffect(() => {
+        // CheckUser prop gets state if userLoggedIn or not (as sets in App.js)
+        if (checkUser) {
+            navigate('/')
+        }
+    })
 
     return (
         <>

@@ -14,9 +14,9 @@ export default function NavBar({ setAlert, userLoggedIn, userLoggedOut }) {
   const navigate = useNavigate('');
 
   const LogOut = async () => {
+    localStorage.removeItem('email')
     userLoggedOut(false)
     setAlert({ message: 'Logout Successfuly', type: 'success' })
-    localStorage.removeItem('email')
     console.log('success .......................')
     navigate('/login');
   };

@@ -16,12 +16,12 @@ const SignUp = ({ setAlert, UserLoggedIn, checkUser }) => {
         }));
         if (name === 'firstName' && value !== undefined) localStorage.setItem('name', value);
     }
-    
+
+    // Firebase Account Creation System
     const SignUp = async () => {
         try {
             setLoader(true)
             await createUserWithEmailAndPassword(auth, data.email, data.password) && UserLoggedIn(true)
-            localStorage.setItem('logined', true)
             setAlert({ message: 'Account Created Successfuly', type: 'success' })
             navigate('/')
         } catch (error) {
@@ -31,6 +31,7 @@ const SignUp = ({ setAlert, UserLoggedIn, checkUser }) => {
         }
     }
     useEffect(() => {
+        // Check if userLoggedIn
         if (checkUser) {
             navigate('/')
         }

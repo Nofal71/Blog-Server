@@ -1,52 +1,50 @@
-import { Button, Card, CardContent, Container, ImageList, ImageListItem, Stack, TextField, Typography, Box } from '@mui/material';
-import React, { useRef, useState } from 'react'
+import { Container, Stack, TextField, Typography, Box, Button } from '@mui/material';
+import React, { useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import DescriptionIcon from '@mui/icons-material/Description';
-import ImageIcon from '@mui/icons-material/Image';
-// import { auth } from '../config/firebase';
+import { db } from '../config/firebase';
+import { addDoc, collection, doc } from 'firebase/firestore';
 
 export default function TextUtils({ setAlert }) {
     const [description, setdescription] = useState('')
     const [title, setTitle] = useState('')
-    const [image, setImage] = useState(null);
-    const fileInputRef = useRef(null);
-    const [buttonLabel, setButtonLabel] = useState('Set');
 
 
-    const handleImageClick = () => {
-        fileInputRef.current.click();
-    };
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setImage(imageUrl);
-            setButtonLabel('Change')
+    // FireBase 
+    const user = localStorage.getItem('email')
+    const ReferenceToDB = doc(db, 'users', user && user)
+    const PostReference = collection(ReferenceToDB, 'posts')
+    const savePost = async () => {
+        const newPost = {
+            title: title,
+            description: description,
+        };
+        // Storing in FireBase
+        try {
+            await addDoc(PostReference, newPost)
+            return true
+        } catch (err) {
+            console.log(err)
+            return false
         }
     };
 
-    const savePost = () => {
-        if (title && description && image) {
-            const existingPosts = JSON.parse(localStorage.getItem('posts')) || [];
+    const saveLocal = () => {
+        if (title && description) {
             const newPost = {
-                image: image,
                 title: title,
                 description: description,
             };
-            const updatedPosts = [...existingPosts, newPost];
-            console.log(updatedPosts);
-            localStorage.setItem('posts', JSON.stringify(updatedPosts));
-            setImage(null);
-            setTitle('');
-            setdescription('');
-
-            setAlert({ message: 'Post saved successfully!', type: 'success' });
+            localStorage.setItem('newPost', JSON.stringify(newPost))
+            // Reset states
+            setTitle(null);
+            setdescription(null);
+            savePost() ? setAlert({ message: 'Post saved successfully!', type: 'success' }) : setAlert({ message: 'Post save failed.', type: 'warning' });
         } else {
-            setAlert({ message: 'Post save failed. Please fill in all fields.', type: 'warning' });
+            setAlert({ message: 'Post save failed. Please fill in all fields.', type: 'warning' })
         }
-    };
-
+    }
 
     return (
         <>
@@ -66,34 +64,7 @@ export default function TextUtils({ setAlert }) {
                         onChange={setdescription}
                         placeholder="Write something amazing..."
                     />
-                </Stack>
-                <Stack direction='column' spacing={3} my={2}>
-                    <Card>
-                        <CardContent>
-                            <Stack direction='column' spacing={2}>
-                                <Typography variant='h6'>Set Image For Your Post</Typography>
-                                <ImageList cols={1}>
-                                    <ImageListItem>
-                                        <img src={image} style={{ objectFit: 'cover', maxWidth: '300px', maxHeight: '30vh' }} alt='...' />
-                                    </ImageListItem>
-                                </ImageList>
-
-                            </Stack>
-                        </CardContent>
-                        <CardContent>
-                            <Button variant='outlined' startIcon={<ImageIcon />} onClick={handleImageClick}>{buttonLabel} Image</Button>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                ref={fileInputRef}
-                                style={{ display: 'none' }}
-                                onChange={handleImageChange}
-                            />
-                        </CardContent>
-                        <CardContent style={{ justifyContent: 'center', display: 'flex' }}>
-                            <Button onClick={savePost} variant='contained' style={{ width: '30vw' }}>Save Post</Button>
-                        </CardContent>
-                    </Card>
+                    <Button onClick={saveLocal} variant='contained'>Save Post</Button>
                 </Stack>
             </Container>
         </>

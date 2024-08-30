@@ -9,7 +9,6 @@ import { Button, Stack } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 
-
 export default function NavBar({ setAlert, userLoggedIn, userLoggedOut }) {
   const [name, setName] = useState()
   const navigate = useNavigate('');
@@ -17,6 +16,8 @@ export default function NavBar({ setAlert, userLoggedIn, userLoggedOut }) {
   const LogOut = async () => {
     userLoggedOut(false)
     setAlert({ message: 'Logout Successfuly', type: 'success' })
+    localStorage.removeItem('email')
+    console.log('success .......................')
     navigate('/login');
   };
 
@@ -30,7 +31,7 @@ export default function NavBar({ setAlert, userLoggedIn, userLoggedOut }) {
     <Box sx={{ flexGrow: 1 }} className='anim'>
       <AppBar position="static">
         <Toolbar>
-         
+
           <Stack direction='row' spacing={2} sx={{ flexGrow: 1 }}>
             <Typography variant="h6" component="div" >
               <Link to='/' style={{ textDecoration: 'none', color: 'white' }}> Text Utils </Link>

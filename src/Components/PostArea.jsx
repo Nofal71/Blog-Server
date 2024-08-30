@@ -1,45 +1,57 @@
-import { Typography, ImageList, ImageListItem, Container, Stack, Alert, Button, Box, Card, CardContent } from '@mui/material';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { Typography, Container, Stack } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { db } from '../config/firebase';
+import { collection, doc, getDocs } from 'firebase/firestore';
 
-export default function PostArea() {
-    const Posts = JSON.parse(localStorage.getItem('posts')) || [];
-    if (!localStorage.getItem('posts')) {
-        console.log('............................')
-        return (
-            <Alert color='information'>No Post Found</Alert>
-        )
-    }
+export default function PostArea({ setAlert }) {
+    const user = localStorage.getItem('email')
+    const ReferenceToDB = doc(db, 'users', user && user);
+    const PostReference = collection(ReferenceToDB, 'posts');
+    const Data = JSON.parse(localStorage.getItem('posts'));
+    const [Posts, setPost] = useState(Data && Data);
+
+
+    const fetchPosts = async () => {
+        try {
+            const postSnapshot = await getDocs(PostReference);
+            const filtered = postSnapshot.docs.map((doc) => ({ ...doc.data() }))
+            localStorage.setItem('posts', JSON.stringify(filtered))
+            setPost(Data)
+            console.log(Data)
+        } catch (err) {
+            console.log(err);
+            setAlert({ message: `no post found , ${err}`, type: 'warning' })
+        }
+    };
+
+    useEffect(() => {
+        if (!Data || localStorage.getItem('newPost')) {
+            fetchPosts();
+            console.log('Fetching Data......................')
+            console.log(Posts, 'Data Fetched ...')
+            if (localStorage.getItem('newPost')) localStorage.removeItem('newPost')
+        }
+        console.log('......................')
+    }, [Data]);
+
     return (
-        <>
-            <Container>
-                <Stack direction='column' spacing={3} my={3}>
-                    <Typography variant='h4' align='center'>Posts</Typography>
-                    <Card>
-                        <CardContent>
-                            <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-                                {Posts.map((item, index) => (
-                                    <ImageListItem key={index}>
-                                        <img
-                                            src={item.image}
-                                            alt={item.title}
-                                            loading="lazy"
-                                            style={{ objectFit: 'cover', width: '100%', height: '100%' ,boxShadow : '1px 1px 3px black' }}
-                                        />
-                                        <Box display='flex' justifyContent='center' alignItems='center' my={1}>
-                                            <Link to='/currentPost'>
-                                                <Button variant='outlined' align='center' size='small' onClick={() => {
-                                                    localStorage.setItem('current', JSON.stringify(item))
-                                                }}>View</Button>
-                                            </Link>
-                                        </Box>
-                                    </ImageListItem>
-                                ))}
-                            </ImageList>
-                        </CardContent>
-                    </Card>
-                </Stack>
-            </Container>
-        </>
+        <Container>
+            <Stack direction='column' spacing={3} my={3}>
+                <Typography variant='h4' align='center'>Posts</Typography>
+                {Data &&
+                    Data.map((item) => {
+                        return (
+                            <Container>
+                                <Stack direction='column' spacing={2}>
+                                    <Typography variant='h5'>{item.title}</Typography>
+                                    <Typography variant="body2" dangerouslySetInnerHTML={{ __html: item.description }} />
+                                </Stack>
+                            </Container>
+                        )
+                    })
+                }
+
+            </Stack>
+        </Container>
     );
 }

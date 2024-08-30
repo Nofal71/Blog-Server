@@ -6,10 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import TextUtils from './Components/TextUtils';
 import PostArea from './Components/PostArea';
-import Post from './Components/Post';
 import AlertMessage from './Components/Alert';
-import { useEffect, useState } from 'react';
-// import { type } from '@testing-library/user-event/dist/type';
+import { useState } from 'react';
 
 const App = () => {
   const [alert, setAlert] = useState(false);
@@ -25,18 +23,12 @@ const App = () => {
 
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const authenticate = (loggedIn) => {
-    setUserLoggedIn(loggedIn)
-
+    if(localStorage.getItem('email')){
+       setUserLoggedIn(true)
+    }else{
+      setUserLoggedIn(loggedIn)
+    }
   };
-
-
-  useEffect(() => {
-    // if (JSON.parse(localStorage.getItem('userData'))) {
-    //   setAlertProp({ message: 'Welcome Back', type: 'success' })
-    // }
-  }, [])
-
-
 
 
   return (
@@ -57,10 +49,6 @@ const App = () => {
         <Route
           path='/postArea'
           element={<PostArea setAlert={setAlertProp} />}
-        />
-        <Route
-          path='/currentPost'
-          element={<Post setAlert={setAlertProp} />}
         />
         <Route
           path='/login'

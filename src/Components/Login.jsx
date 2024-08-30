@@ -6,6 +6,10 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 
 const Login = ({ setAlert, UserLoggedIn, checkUser }) => {
 
+    // useEffect(() => {
+    //     console.log('errrorrr')
+    // })
+
     const navigate = useNavigate()
     const [data, setData] = useState('');
     const [loader, setLoader] = useState(false);
@@ -17,25 +21,33 @@ const Login = ({ setAlert, UserLoggedIn, checkUser }) => {
             [name]: value
         }));
     }
-    // FireBase
+
+    // FireBase SignIn handling
     const SignIn = async () => {
         try {
             setLoader(true)
+            // FireBase authenticate user if its true , userLoggedIn states sets trur else false
             await signInWithEmailAndPassword(auth, data.email, data.password) && UserLoggedIn(true)
-            localStorage.setItem('logined' , true)
             navigate('/')
-            setAlert({ message: 'Login Success', type: 'success' })
+            return true
         } catch (error) {
-            setAlert({ message: 'Login Failed', type: 'warning' }) && UserLoggedIn(false)
             setLoader(false)
             console.error(error)
+            return false
         }
     }
-    useEffect(() => {
-        if (checkUser){
-            navigate('/')
-        }
-    })
+    const saveLocal = () => {
+        localStorage.setItem('email', data.email)
+        SignIn() ? setAlert({ message: 'Login Success', type: 'success' }) : setAlert({ message: 'Login Failed', type: 'warning' }) && UserLoggedIn(false);
+        setData('')
+    }
+
+    // useEffect(() => {
+    //     // CheckUser prop gets state if userLoggedIn or not (as sets in App.js)
+    //     if (checkUser) {
+    //         navigate('/')
+    //     }
+    // })
 
     return (
         <>
@@ -47,7 +59,7 @@ const Login = ({ setAlert, UserLoggedIn, checkUser }) => {
                             <TextField name='email' placeholder='Enter Your Name' label='email' value={data.name} onChange={handleChange} fullWidth />
                             <TextField name='password' placeholder='Enter Your Name' label='password' value={data.name} onChange={handleChange} type='password' fullWidth />
                             <Typography variant='subtitle2'>Don't have Account <Link to='/signup'> Signup </Link></Typography>
-                            <Button variant='contained' size='medium' onClick={SignIn} > Login </Button>
+                            <Button variant='contained' size='medium' onClick={saveLocal} > Login </Button>
                             {loader &&
                                 <LinearProgress />
                             }

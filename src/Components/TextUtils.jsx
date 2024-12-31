@@ -12,7 +12,7 @@ export default function TextUtils({ setAlert }) {
 
 
     // FireBase 
-    const user = localStorage.getItem('email')
+    const user = localStorage.getItem('email') || [];
     const ReferenceToDB = doc(db, 'users', user && user)
     const PostReference = collection(ReferenceToDB, 'posts')
     const savePost = async () => {

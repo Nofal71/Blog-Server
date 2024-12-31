@@ -23,9 +23,9 @@ const App = () => {
 
   const [userLoggedIn, setUserLoggedIn] = useState(false);
   const authenticate = (loggedIn) => {
-    if(localStorage.getItem('email')){
-       setUserLoggedIn(true)
-    }else{
+    if (localStorage.getItem('email')) {
+      setUserLoggedIn(true)
+    } else {
       setUserLoggedIn(loggedIn)
     }
   };
@@ -44,7 +44,7 @@ const App = () => {
             <PrivateRoute userLoggedIn={userLoggedIn} UserLoggedIn={authenticate}>
               <TextUtils setAlert={setAlertProp} />
             </PrivateRoute>
-          }
+          } 
         />
         <Route
           path='/postArea'

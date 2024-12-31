@@ -30,12 +30,7 @@ const SignUp = ({ setAlert, UserLoggedIn, checkUser }) => {
             setAlert({ message: `Failed To Create ${error}`, type: 'warning' })
         }
     }
-    useEffect(() => {
-        // Check if userLoggedIn
-        if (checkUser) {
-            navigate('/')
-        }
-    })
+
 
     return (
         <>
